@@ -11,7 +11,7 @@
     ],
     "require": {
         "php": ">=5.4",
-        "nao-pon/flysystem": "dev-pilot",
+        "league/flysystem": "~1.0",
         "intervention/image": "~2.0"
     },
     "suggest": {
