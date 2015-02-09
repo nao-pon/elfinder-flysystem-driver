@@ -1,5 +1,5 @@
 {
-    "name": "barryvdh/elfinder-flysystem-driver",
+    "name": "nao-pon/elfinder-flysystem-driver",
     "description": "A Flysystem Driver for elFinder",
     "license": "MIT",
     "keywords": ["elfinder", "flysystem", "filesystem"],
@@ -11,7 +11,7 @@
     ],
     "require": {
         "php": ">=5.4",
-        "league/flysystem": "~1.0",
+        "nao-pon/flysystem": "dev-pilot",
         "intervention/image": "~2.0"
     },
     "suggest": {
