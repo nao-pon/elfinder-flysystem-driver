@@ -1,16 +1,20 @@
 <?php
 
+namespace Barryvdh\elFinderFlysystemDriver;
+
+use elFinderVolumeDriver;
 use Intervention\Image\ImageManager;
 use League\Flysystem\Util;
 use League\Flysystem\FilesystemInterface;
 use League\Glide\Http\UrlBuilderFactory;
+use Barryvdh\elFinderFlysystemDriver\Plugin\GetUrl;
 
 /**
  * elFinder driver for Flysytem (https://github.com/thephpleague/flysystem)
  *
  * @author Barry vd. Heuvel
  * */
-class elFinderVolumeFlysystem extends elFinderVolumeDriver {
+class Driver extends elFinderVolumeDriver {
 
     /**
      * Driver id
@@ -94,6 +98,8 @@ class elFinderVolumeFlysystem extends elFinderVolumeDriver {
         if (!($this->fs instanceof FilesystemInterface)) {
             return $this->setError('A filesystem instance is required');
         }
+
+        $this->fs->addPlugin(new GetUrl());
 
         $this->options['icon'] = $this->options['icon'] ?: $this->getIcon();
         $this->root = $this->options['path'];
@@ -606,5 +612,34 @@ class elFinderVolumeFlysystem extends elFinderVolumeDriver {
         }
 
         return false;
+    }
+    
+    public function getImageSize($path, $mime = '')
+    {
+		$size = false;
+		if ($mime === '' || strtolower(substr($mime, 0, 5)) === 'image') {
+			if ($data = $this->_getContents($path)) {
+				if ($size = @getimagesizefromstring($data)) {
+					$size['dimensions'] = $size[0].'x'.$size[1];
+				}
+			}
+		}
+		return $size;
+	}
+
+    /**
+     * Return content URL
+     *
+     * @param string  $hash    file hash
+     * @param array   $options options
+     * @return string
+     **/
+    public function getContentUrl($hash, $options = array())
+    {
+        if (($file = $this->file($hash)) == false || !$file['url'] || $file['url'] == 1) {
+            $path = $this->decode($hash);
+            return $this->fs->getUrl($path);
+        }
+        return $file['url'];
     }
 }
