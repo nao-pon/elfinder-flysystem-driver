@@ -31,11 +31,7 @@ class HasDir extends AbstractPlugin
         parent::setFilesystem($filesystem);
 
         if ( $filesystem instanceof Filesystem) {
-            $adapter = $filesystem->getAdapter();
-            while($adapter instanceof CachedAdapter) {
-                $adapter = $adapter->getAdapter();
-            }
-            $this->adapter = $adapter;
+            $this->adapter = $filesystem->getAdapter();
 
             // For a cached adapter, get the underlying instance
             if ($this->adapter instanceof CachedAdapter) {
